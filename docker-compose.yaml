@@ -16,9 +16,9 @@ services:
       - /etc/nginx/sites-available:/sites-available
       - /etc/nginx/sites-enabled:/sites-enabled
     command: >
-      sh -c "cp -f /nginx.conf /sites-available/monitoring.serp24.online &&
-             ln -sf /etc/nginx/sites-available/monitoring.serp24.online /sites-enabled/monitoring.serp24.online &&
-             ls -l /sites-enabled/monitoring.serp24.online &&
+      sh -c "cp -f /nginx.conf /sites-available/jenkins.serp24.online &&
+             ln -sf /etc/nginx/sites-available/jenkins.serp24.online /sites-enabled/jenkins.serp24.online &&
+             ls -l /sites-enabled/jenkins.serp24.online &&
              nginx -t && systemctl restart nginx|| echo 'NGINX test failed'"
     # Runs once and exits
 volumes:
