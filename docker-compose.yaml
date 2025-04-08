@@ -9,6 +9,17 @@ services:
     volumes:
       - jenkins_data:/var/jenkins_home
     restart: unless-stopped
-
+  nginx-config:
+    image: alpine:latest
+    volumes:
+      - ./nginx.conf:/nginx.conf:ro
+      - /etc/nginx/sites-available:/sites-available
+      - /etc/nginx/sites-enabled:/sites-enabled
+    command: >
+      sh -c "cp -f /nginx.conf /sites-available/monitoring.serp24.online &&
+             ln -sf /etc/nginx/sites-available/monitoring.serp24.online /sites-enabled/monitoring.serp24.online &&
+             ls -l /sites-enabled/monitoring.serp24.online &&
+             nginx -t && systemctl restart nginx|| echo 'NGINX test failed'"
+    # Runs once and exits
 volumes:
   jenkins_data:
