@@ -9,24 +9,17 @@ services:
     volumes:
       - jenkins_data:/var/jenkins_home
     restart: unless-stopped
-    networks:
-      - jenkins-net
-
   nginx-config:
     image: alpine:latest
     volumes:
-      - ./nginx-jenkins.conf:/nginx-jenkins.conf:ro
+      - ./nginx.conf:/nginx.conf:ro
       - /etc/nginx/sites-available:/sites-available
       - /etc/nginx/sites-enabled:/sites-enabled
     command: >
-      sh -c "cp -f /nginx-jenkins.conf /sites-available/jenkins.serp24.online &&
-             ln -sf /sites-available/jenkins.serp24.online /sites-enabled/jenkins.serp24.online &&
+      sh -c "cp -f /nginx.conf /sites-available/jenkins.serp24.online &&
+             ln -sf /etc/nginx/sites-available/jenkins.serp24.online /sites-enabled/jenkins.serp24.online &&
              ls -l /sites-enabled/jenkins.serp24.online &&
-             nginx -t || echo 'NGINX test failed' &&
-             systemctl restart nginx || echo 'NGINX restart failed (likely not running on host)'"
-
+             nginx -t || echo 'NGINX test failed'"
+   
 volumes:
   jenkins_data:
-
-networks:
-  jenkins-net:
