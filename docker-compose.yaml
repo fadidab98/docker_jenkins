@@ -6,10 +6,11 @@ services:
       dockerfile: Dockerfile
     container_name: jenkins-cicd
     ports:
-      - "8080:8080"  # Jenkins UI
-      - "50000:50000"  # Jenkins agents
+      - "8080:8080"
+      - "50000:50000"
     volumes:
       - jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
   nginx-config:
     image: alpine:latest
@@ -20,7 +21,8 @@ services:
     command: >
       sh -c "cp -f /nginx.conf /sites-available/jenkins.serp24.online &&
              ln -sf /sites-available/jenkins.serp24.online /sites-enabled/jenkins.serp24.online &&
-             ls -l /sites-enabled/jenkins.serp24.online"
+             ls -l /sites-enabled/jenkins.serp24.online &&
+             nginx -t || echo 'NGINX test failed'"
 
 volumes:
   jenkins_data:
