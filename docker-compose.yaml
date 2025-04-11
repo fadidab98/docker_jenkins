@@ -1,7 +1,9 @@
 version: '3.8'
 services:
   jenkins:
-    image: jenkins/jenkins:lts
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: jenkins-cicd
     ports:
       - "8080:8080"  # Jenkins UI
@@ -17,9 +19,8 @@ services:
       - /etc/nginx/sites-enabled:/sites-enabled
     command: >
       sh -c "cp -f /nginx.conf /sites-available/jenkins.serp24.online &&
-             ln -sf /etc/nginx/sites-available/jenkins.serp24.online /sites-enabled/jenkins.serp24.online &&
-             ls -l /sites-enabled/jenkins.serp24.online &&
-             nginx -t || echo 'NGINX test failed'"
-   
+             ln -sf /sites-available/jenkins.serp24.online /sites-enabled/jenkins.serp24.online &&
+             ls -l /sites-enabled/jenkins.serp24.online"
+
 volumes:
   jenkins_data:
