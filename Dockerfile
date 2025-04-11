@@ -11,8 +11,12 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install -y docker-ce docker-ce-cli containerd.io
 
-# Create docker group with host's GID (988)
-RUN groupadd -g 988 docker && \
+# Adjust or create docker group with GID 988
+RUN if getent group docker > /dev/null; then \
+        groupmod -g 988 docker; \
+    else \
+        groupadd -g 988 docker; \
+    fi && \
     usermod -aG docker jenkins
 
 # Clean up
